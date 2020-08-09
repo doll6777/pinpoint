@@ -60,7 +60,6 @@ public class AlarmWriter implements ItemWriter<AlarmChecker> {
             if (checker.isDetected()) {
                 sendAlarmMessage(beforeCheckerResult, checker);
             }
-
             alarmService.updateBeforeCheckerResult(beforeCheckerResult, checker);
         }
     }
@@ -74,7 +73,6 @@ public class AlarmWriter implements ItemWriter<AlarmChecker> {
                 alarmMessageSender.sendEmail(checker, beforeCheckerResult.getSequenceCount() + 1, stepExecution);
             }
         }
-
     }
 
     private boolean isTurnToSendAlarm(CheckerResult beforeCheckerResult) {

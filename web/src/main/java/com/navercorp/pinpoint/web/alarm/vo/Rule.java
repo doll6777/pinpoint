@@ -27,14 +27,17 @@ public class Rule {
     private String checkerName;
     private Integer threshold;
     private String userGroupId;
+    private String webhookUrl;
+
     private boolean smsSend;
     private boolean emailSend;
+
     private String notes;
 
     public Rule() {
     }
 
-    public Rule(String applicationId, String serviceType, String checkerName, Integer Threshold, String userGroupId, boolean smsSend, boolean emailSend, String notes) {
+    public Rule(String applicationId, String serviceType, String checkerName, Integer Threshold, String userGroupId, String webhookUrl,  boolean smsSend, boolean emailSend, String notes) {
         this.applicationId = applicationId;
         this.serviceType = serviceType;
         this.checkerName = checkerName;
@@ -43,6 +46,7 @@ public class Rule {
         this.smsSend = smsSend;
         this.emailSend = emailSend;
         this.notes = notes;
+        this.webhookUrl = webhookUrl;
     }
 
     public String getApplicationId() {
@@ -117,6 +121,14 @@ public class Rule {
         this.notes = notes;
     }
 
+    public String getWebhookUrl() {
+        return webhookUrl;
+    }
+
+    public void setWebhookUrl(String webhookUrl) {
+        this.webhookUrl = webhookUrl;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rule{");
@@ -124,6 +136,7 @@ public class Rule {
         sb.append(", applicationId='").append(applicationId).append('\'');
         sb.append(", serviceType='").append(serviceType).append('\'');
         sb.append(", checkerName='").append(checkerName).append('\'');
+        sb.append(", webHookUrl='").append(webhookUrl).append('\'');
         sb.append(", threshold=").append(threshold);
         sb.append(", userGroupId='").append(userGroupId).append('\'');
         sb.append(", smsSend=").append(smsSend);
