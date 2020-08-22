@@ -60,4 +60,12 @@ public class SimpleController {
 
         return map;
     }
+
+    @RequestMapping(value = "/webhook", method = RequestMethod.POST)
+    public ResponseEntity<Void> webhook(@RequestBody WebhookPayload user) throws Exception {
+        // TODO
+        
+        return null;
+    }
+
 }
