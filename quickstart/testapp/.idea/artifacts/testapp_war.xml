@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="testapp:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>testapp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="pinpoint-quickstart-testapp-${maven.pinpoint.version}.war">
+      <element id="artifact" artifact-name="testapp:war exploded" />
+    </root>
+  </artifact>
+</component>
