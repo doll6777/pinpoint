@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NAVER Corp.
+ * Copyright 2020 NAVER Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import com.navercorp.pinpoint.web.alarm.checker.AgentChecker;
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
 import com.navercorp.pinpoint.web.alarm.vo.WebHookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
-import com.navercorp.pinpoint.web.service.UserGroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
@@ -44,9 +43,8 @@ public class SpringWebhookSender implements WebhookSender {
     private final String webhookReceiverUrl;
     private final boolean webhookEnable;
 
-    public SpringWebhookSender(BatchConfiguration batchConfiguration, UserGroupService userGroupService, RestTemplate springRestTemplate) {
+    public SpringWebhookSender(BatchConfiguration batchConfiguration, RestTemplate springRestTemplate) {
         Objects.requireNonNull(batchConfiguration, "batchConfiguration");
-        Objects.requireNonNull(userGroupService, "userGroupService");
         Objects.requireNonNull(springRestTemplate, "springRestTemplate");
 
         this.batchConfiguration = batchConfiguration;
