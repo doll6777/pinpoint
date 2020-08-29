@@ -15,10 +15,11 @@
  */
 package com.navercorp.pinpoint.web.alarm;
 
-import com.navercorp.pinpoint.web.alarm.checker.AgentChecker;
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
 import com.navercorp.pinpoint.web.alarm.vo.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
+import com.navercorp.pinpoint.web.service.UserGroupService;
+import com.navercorp.pinpoint.web.vo.UserGroupMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
@@ -29,19 +30,23 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 public class SpringWebhookSender implements WebhookSender {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final BatchConfiguration batchConfiguration;
+    private final UserGroupService userGroupService;
     private final RestTemplate springRestTemplate;
     private final String webhookReceiverUrl;
     private final boolean webhookEnable;
     
-    public SpringWebhookSender(BatchConfiguration batchConfiguration, RestTemplate springRestTemplate) {
+    public SpringWebhookSender(BatchConfiguration batchConfiguration, UserGroupService userGroupService, RestTemplate springRestTemplate) {
         Objects.requireNonNull(batchConfiguration, "batchConfiguration");
         Objects.requireNonNull(springRestTemplate, "springRestTemplate");
-        
+        Objects.requireNonNull(userGroupService, "userGroupService");
+
+        this.userGroupService = userGroupService;
         this.batchConfiguration = batchConfiguration;
         this.webhookReceiverUrl = batchConfiguration.getWebhookReceiverUrl();
         this.webhookEnable = batchConfiguration.getWebhookEnable();
@@ -59,6 +64,9 @@ public class SpringWebhookSender implements WebhookSender {
         
         try {
             WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount);
+            List<UserGroupMember> userGroupMembers = userGroupService.selectMember(checker.getRule().getUserGroupId());
+            webhookPayload.setUserGroupMembers(userGroupMembers);
+            
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
