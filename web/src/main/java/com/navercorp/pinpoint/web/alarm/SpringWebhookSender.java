@@ -32,11 +32,6 @@ import java.net.URI;
 import java.util.Objects;
 
 public class SpringWebhookSender implements WebhookSender {
-    
-    private static final String CHECKER_TYPE = "Checker-Type";
-    private static final String AGENT_CHECKER = "AgentChecker";
-    private static final String ALARM_CHECKER = "AlarmChecker";
-    
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final BatchConfiguration batchConfiguration;
     private final RestTemplate springRestTemplate;
@@ -66,13 +61,7 @@ public class SpringWebhookSender implements WebhookSender {
             WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-            
-            if (checker instanceof AgentChecker) {
-                httpHeaders.set(CHECKER_TYPE, AGENT_CHECKER);
-            } else {
-                httpHeaders.set(CHECKER_TYPE, ALARM_CHECKER);
-            }
-            
+
             HttpEntity<WebhookPayload> httpEntity = new HttpEntity<>(webhookPayload, httpHeaders);
             springRestTemplate.exchange(new URI(webhookReceiverUrl), HttpMethod.POST, httpEntity, String.class);
             logger.info("send webhook : {}", checker.getRule());
