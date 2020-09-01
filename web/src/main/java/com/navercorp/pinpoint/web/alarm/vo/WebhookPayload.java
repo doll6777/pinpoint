@@ -2,9 +2,6 @@ package com.navercorp.pinpoint.web.alarm.vo;
 
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
-import com.navercorp.pinpoint.web.vo.UserGroupMember;
-
-import java.util.List;
 
 public class WebhookPayload {
     
@@ -17,7 +14,7 @@ public class WebhookPayload {
     private String notes;
     private String checkerType;
     private CheckerValue checkerValue;
-    private List<UserGroupMember> userGroupMembers;
+    private UserGroupMemberPayload userGroupMembers;
     
     public WebhookPayload(AlarmChecker checker, BatchConfiguration batchConfiguration, int sequenceCount) {
         this.pinpointUrl = batchConfiguration.getPinpointUrl();
@@ -31,11 +28,11 @@ public class WebhookPayload {
         this.checkerValue = checker.getCheckerValue();
     }
     
-    public void setUserGroupMembers(List<UserGroupMember> userGroupMembers) {
+    public void setUserGroupMembers(UserGroupMemberPayload userGroupMembers) {
         this.userGroupMembers = userGroupMembers;
     }
     
-    public List<UserGroupMember> getUserGroupMembers() {
+    public UserGroupMemberPayload getUserGroupMembers() {
         return userGroupMembers;
     }
     
