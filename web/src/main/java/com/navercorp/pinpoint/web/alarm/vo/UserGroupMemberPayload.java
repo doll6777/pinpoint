@@ -5,11 +5,11 @@ import java.util.List;
 public class UserGroupMemberPayload {
     
     private String userGroupId;
-    private List<UserMember> userMembers;
+    private List<UserMember> userGroupMembers;
     
-    public UserGroupMemberPayload(String userGroupId, List<UserMember> userMembers) {
+    public UserGroupMemberPayload(String userGroupId, List<UserMember> userGroupMembers) {
         this.userGroupId = userGroupId;
-        this.userMembers = userMembers;
+        this.userGroupMembers = userGroupMembers;
     }
     
     public String getUserGroupId() {
@@ -17,7 +17,7 @@ public class UserGroupMemberPayload {
     }
     
     public List<UserMember> getUserGroupMembers() {
-        return userMembers;
+        return userGroupMembers;
     }
     
     public void setUserGroupId(String userGroupId) {
@@ -25,6 +25,6 @@ public class UserGroupMemberPayload {
     }
     
     public void setUserGroupMembers(List<UserMember> userMembers) {
-        this.userMembers = userMembers;
+        this.userGroupMembers = userMembers;
     }
 }

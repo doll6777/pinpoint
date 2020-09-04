@@ -65,15 +65,13 @@ public class SpringWebhookSender implements WebhookSender {
         }
         
         try {
-            WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount);
-            
             List<UserMember> userMembers = userGroupService.selectMember(checker.getRule().getUserGroupId())
                     .stream()
                     .map((UserMember::new))
                     .collect(Collectors.toList());
             UserGroupMemberPayload userGroupMemberPayload = new UserGroupMemberPayload(checker.getRule().getUserGroupId(), userMembers);
-            webhookPayload.setUserGroupMembers(userGroupMemberPayload);
             
+            WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount, userGroupMemberPayload);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
             
