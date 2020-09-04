@@ -13,9 +13,9 @@ public class WebhookPayload {
     private Integer threshold;
     private String notes;
     private CheckerValue checkerValue;
-    private UserGroupMemberPayload userGroupMembers;
+    private UserGroupMemberPayload userGroupMemberPayload;
     
-    public WebhookPayload(AlarmChecker checker, BatchConfiguration batchConfiguration, int sequenceCount) {
+    public WebhookPayload(AlarmChecker checker, BatchConfiguration batchConfiguration, int sequenceCount, UserGroupMemberPayload userGroupMemberPayload) {
         this.pinpointUrl = batchConfiguration.getPinpointUrl();
         this.batchEnv = batchConfiguration.getBatchEnv();
         this.sequenceCount = sequenceCount;
@@ -24,14 +24,11 @@ public class WebhookPayload {
         this.threshold = checker.getRule().getThreshold();
         this.notes = checker.getRule().getNotes();
         this.checkerValue = checker.getCheckerValue();
+        this.userGroupMemberPayload = userGroupMemberPayload;
     }
     
-    public void setUserGroupMembers(UserGroupMemberPayload userGroupMembers) {
-        this.userGroupMembers = userGroupMembers;
-    }
-    
-    public UserGroupMemberPayload getUserGroupMembers() {
-        return userGroupMembers;
+    public UserGroupMemberPayload getUserGroupMemberPayload() {
+        return userGroupMemberPayload;
     }
     
     public String getPinpointUrl() {
