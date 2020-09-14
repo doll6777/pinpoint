@@ -16,11 +16,14 @@
 package com.navercorp.pinpoint.web.alarm;
 
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
-import com.navercorp.pinpoint.web.alarm.vo.UserGroupMemberPayload;
-import com.navercorp.pinpoint.web.alarm.vo.UserMember;
-import com.navercorp.pinpoint.web.alarm.vo.WebhookPayload;
+import com.navercorp.pinpoint.web.alarm.vo.sender.UserGroupMemberPayload;
+import com.navercorp.pinpoint.web.alarm.vo.sender.UserMember;
+import com.navercorp.pinpoint.web.alarm.vo.sender.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import com.navercorp.pinpoint.web.service.UserGroupService;
+import com.navercorp.pinpoint.web.service.UserService;
+import com.navercorp.pinpoint.web.vo.User;
+import com.navercorp.pinpoint.web.vo.UserGroupMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
@@ -35,41 +38,48 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SpringWebhookSender implements WebhookSender {
+public class WebhookSenderImpl implements WebhookSender {
+    
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final BatchConfiguration batchConfiguration;
     private final UserGroupService userGroupService;
+    private final UserService userService;
     private final RestTemplate springRestTemplate;
     private final String webhookReceiverUrl;
     private final boolean webhookEnable;
     
-    public SpringWebhookSender(BatchConfiguration batchConfiguration, UserGroupService userGroupService, RestTemplate springRestTemplate) {
+    public WebhookSenderImpl(BatchConfiguration batchConfiguration, UserGroupService userGroupService, UserService userService, RestTemplate springRestTemplate) {
         Objects.requireNonNull(batchConfiguration, "batchConfiguration");
         Objects.requireNonNull(springRestTemplate, "springRestTemplate");
         Objects.requireNonNull(userGroupService, "userGroupService");
+        Objects.requireNonNull(userService, "userService");
         
         this.userGroupService = userGroupService;
         this.batchConfiguration = batchConfiguration;
+        this.userService = userService;
         this.webhookReceiverUrl = batchConfiguration.getWebhookReceiverUrl();
         this.webhookEnable = batchConfiguration.isWebhookEnable();
         this.springRestTemplate = springRestTemplate;
     }
     
     @Override
-    public void triggerWebhook(AlarmChecker checker, int sequenceCount, StepExecution stepExecution) {
-        if (webhookReceiverUrl.isEmpty()) {
-            return;
-        }
+    public void sendWebhook(AlarmChecker checker, int sequenceCount, StepExecution stepExecution) {
         if (!webhookEnable) {
             return;
         }
-        
+        if (webhookReceiverUrl.isEmpty()) {
+            return;
+        }
         try {
-            List<UserMember> userMembers = userGroupService.selectMember(checker.getRule().getUserGroupId())
-                    .stream()
-                    .map((UserMember::new))
-                    .collect(Collectors.toList());
-            UserGroupMemberPayload userGroupMemberPayload = new UserGroupMemberPayload(checker.getRule().getUserGroupId(), userMembers);
+            String userGroupId = checker.getRule().getUserGroupId();
+            
+            List<UserGroupMember> userGroupMembers = userGroupService.selectMember(userGroupId);
+            List<UserMember> userMembers = userGroupMembers.stream().map((userGroupMember -> {
+                User user = userService.selectUserByUserId(userGroupMember.getMemberId());
+                return toUserMember(user);
+            })).collect(Collectors.toList());
+            
+            UserGroupMemberPayload userGroupMemberPayload = new UserGroupMemberPayload(userGroupId, userMembers);
             
             WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount, userGroupMemberPayload);
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -81,5 +91,16 @@ public class SpringWebhookSender implements WebhookSender {
         } catch (Exception e) {
             logger.error("can't send webhook. {}", checker.getRule(), e);
         }
+    }
+    
+    private UserMember toUserMember(User user) {
+        UserMember userMember = new UserMember();
+        userMember.setMemberId(user.getUserId());
+        userMember.setDepartment(user.getDepartment());
+        userMember.setName(user.getName());
+        userMember.setPhoneCountryCode(user.getPhoneCountryCode());
+        userMember.setPhoneNumber(user.getPhoneNumber());
+        userMember.setEmail(user.getEmail());
+        return userMember;
     }
 }
