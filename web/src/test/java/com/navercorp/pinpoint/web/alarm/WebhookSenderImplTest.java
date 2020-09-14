@@ -56,6 +56,12 @@ public class WebhookSenderImplTest {
             // pass
         }
         try {
+            new WebhookSenderImpl(new BatchConfiguration(), userGroupService, null, restTemplate);
+            fail();
+        } catch (NullPointerException npe) {
+            // pass
+        }
+        try {
             new WebhookSenderImpl(null, userGroupService, userService, null);
             fail();
         } catch (NullPointerException npe) {
@@ -64,7 +70,7 @@ public class WebhookSenderImplTest {
     }
     
     @Test
-    public void whenWebhookEnableFalseDoNotTriggerWebhook() throws Exception {
+    public void whenWebhookEnableFalseDoNotSendWebhook() throws Exception {
         // given
         BatchConfiguration configurationStub = getConfigurationStub(false);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
@@ -82,7 +88,7 @@ public class WebhookSenderImplTest {
     }
     
     @Test
-    public void whenWebhookEnableTrueDoTriggerWebhook() throws Exception {
+    public void whenWebhookEnableTrueDoSendWebhook() throws Exception {
         // given
         BatchConfiguration configurationStub = getConfigurationStub(true);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
@@ -101,7 +107,7 @@ public class WebhookSenderImplTest {
     }
     
     @Test
-    public void testTriggerWebhookWithSpringRestTemplateSuccess() throws Exception {
+    public void testSendWebhookWithSpringRestTemplateSuccess() throws Exception {
         // given
         BatchConfiguration configurationStub = getConfigurationStub(true);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
