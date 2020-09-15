@@ -7,8 +7,6 @@ import com.navercorp.pinpoint.web.alarm.vo.Rule;
 import com.navercorp.pinpoint.web.alarm.vo.sender.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import com.navercorp.pinpoint.web.service.UserGroupService;
-import com.navercorp.pinpoint.web.service.UserService;
-import com.navercorp.pinpoint.web.vo.User;
 import com.navercorp.pinpoint.web.vo.UserGroupMember;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -37,32 +35,31 @@ public class WebhookSenderImplTest {
 
     @Mock BatchConfiguration batchConfiguration;
     @Mock UserGroupService userGroupService;
-    @Mock UserService userService;
     
     @Mock RestTemplate restTemplate;
 
     @Test
     public void constructorRequiresNotNullTest() throws Exception {
         try {
-            new WebhookSenderImpl(null , userGroupService, userService,  restTemplate);
+            new WebhookSenderImpl(null , userGroupService,  restTemplate);
             fail();
         } catch(NullPointerException npe) {
             // pass
         }
         try {
-            new WebhookSenderImpl(new BatchConfiguration(), null, userService, restTemplate);
+            new WebhookSenderImpl(new BatchConfiguration(), null, restTemplate);
             fail();
         } catch (NullPointerException npe) {
             // pass
         }
         try {
-            new WebhookSenderImpl(new BatchConfiguration(), userGroupService, null, restTemplate);
+            new WebhookSenderImpl(new BatchConfiguration(), userGroupService, restTemplate);
             fail();
         } catch (NullPointerException npe) {
             // pass
         }
         try {
-            new WebhookSenderImpl(null, userGroupService, userService, null);
+            new WebhookSenderImpl(null, userGroupService, null);
             fail();
         } catch (NullPointerException npe) {
             // pass
@@ -75,9 +72,8 @@ public class WebhookSenderImplTest {
         BatchConfiguration configurationStub = getConfigurationStub(false);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
         UserGroupService userGroupServiceStub = getUserGroupServiceStub();
-        UserService userServiceStub = getUserServiceStub();
 
-        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, userServiceStub, restTemplateStub);
+        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, restTemplateStub);
 
         // when
         sender.sendWebhook(null, 0, null);
@@ -93,9 +89,8 @@ public class WebhookSenderImplTest {
         BatchConfiguration configurationStub = getConfigurationStub(true);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
         UserGroupService userGroupServiceStub = getUserGroupServiceStub();
-        UserService userServiceStub = getUserServiceStub();
 
-        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, userServiceStub, restTemplateStub);
+        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, restTemplateStub);
         
         // when
         sender.sendWebhook(getAlarmCheckerStub(), 0, null);
@@ -112,9 +107,8 @@ public class WebhookSenderImplTest {
         BatchConfiguration configurationStub = getConfigurationStub(true);
         RestTemplate restTemplateStub = getRestTemplateStubSuccessToSend();
         UserGroupService userGroupServiceStub = getUserGroupServiceStub();
-        UserService userServiceStub = getUserServiceStub();
 
-        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, userServiceStub, restTemplateStub);
+        sender = new WebhookSenderImpl(configurationStub, userGroupServiceStub, restTemplateStub);
     
         ArgumentCaptor<HttpEntity<WebhookPayload>> argumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
     
@@ -155,19 +149,6 @@ public class WebhookSenderImplTest {
         
         
         return batchConfigurationMock;
-    }
-    
-    private UserService getUserServiceStub() {
-        UserService mock = mock(UserService.class);
-        User user1 = new User("member1", "name", "department", 82, "1012345678", "pinpoint@pinpoint.com");
-        User user2 = new User("member2", "name", "department", 82, "1012345678", "pinpoint@pinpoint.com");
-        User user3 = new User("member3", "name", "department", 82, "1012345678", "pinpoint@pinpoint.com");
-    
-        when(mock.selectUserByUserId("member1")).thenReturn(user1);
-        when(mock.selectUserByUserId("member2")).thenReturn(user2);
-        when(mock.selectUserByUserId("member3")).thenReturn(user3);
-    
-        return mock;
     }
     
     private UserGroupService getUserGroupServiceStub() {

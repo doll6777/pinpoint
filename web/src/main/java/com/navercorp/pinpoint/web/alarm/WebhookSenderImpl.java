@@ -21,9 +21,6 @@ import com.navercorp.pinpoint.web.alarm.vo.sender.UserMember;
 import com.navercorp.pinpoint.web.alarm.vo.sender.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import com.navercorp.pinpoint.web.service.UserGroupService;
-import com.navercorp.pinpoint.web.service.UserService;
-import com.navercorp.pinpoint.web.vo.User;
-import com.navercorp.pinpoint.web.vo.UserGroupMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
@@ -43,20 +40,17 @@ public class WebhookSenderImpl implements WebhookSender {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final BatchConfiguration batchConfiguration;
     private final UserGroupService userGroupService;
-    private final UserService userService;
     private final RestTemplate springRestTemplate;
     private final String webhookReceiverUrl;
     private final boolean webhookEnable;
     
-    public WebhookSenderImpl(BatchConfiguration batchConfiguration, UserGroupService userGroupService, UserService userService, RestTemplate springRestTemplate) {
+    public WebhookSenderImpl(BatchConfiguration batchConfiguration, UserGroupService userGroupService, RestTemplate springRestTemplate) {
         Objects.requireNonNull(batchConfiguration, "batchConfiguration");
         Objects.requireNonNull(springRestTemplate, "springRestTemplate");
         Objects.requireNonNull(userGroupService, "userGroupService");
-        Objects.requireNonNull(userService, "userService");
         
         this.userGroupService = userGroupService;
         this.batchConfiguration = batchConfiguration;
-        this.userService = userService;
         this.webhookReceiverUrl = batchConfiguration.getWebhookReceiverUrl();
         this.webhookEnable = batchConfiguration.isWebhookEnable();
         this.springRestTemplate = springRestTemplate;
@@ -73,12 +67,11 @@ public class WebhookSenderImpl implements WebhookSender {
         try {
             String userGroupId = checker.getRule().getUserGroupId();
             
-            List<UserGroupMember> userGroupMembers = userGroupService.selectMember(userGroupId);
-            List<UserMember> userMembers = userGroupMembers.stream().map((userGroupMember -> {
-                User user = userService.selectUserByUserId(userGroupMember.getMemberId());
-                return toUserMember(user);
-            })).collect(Collectors.toList());
-            
+            List<UserMember> userMembers = userGroupService.selectMember(userGroupId)
+                    .stream()
+                    .map(userMember -> new UserMember(userMember.getMemberId(), userMember.getName(), userMember.getEmail(), userMember.getDepartment(), userMember.getPhoneNumber(), userMember.getPhoneCountryCode()))
+                    .collect(Collectors.toList());
+
             UserGroupMemberPayload userGroupMemberPayload = new UserGroupMemberPayload(userGroupId, userMembers);
             
             WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount, userGroupMemberPayload);
@@ -91,16 +84,5 @@ public class WebhookSenderImpl implements WebhookSender {
         } catch (Exception e) {
             logger.error("can't send webhook. {}", checker.getRule(), e);
         }
-    }
-    
-    private UserMember toUserMember(User user) {
-        UserMember userMember = new UserMember();
-        userMember.setMemberId(user.getUserId());
-        userMember.setDepartment(user.getDepartment());
-        userMember.setName(user.getName());
-        userMember.setPhoneCountryCode(user.getPhoneCountryCode());
-        userMember.setPhoneNumber(user.getPhoneNumber());
-        userMember.setEmail(user.getEmail());
-        return userMember;
     }
 }
