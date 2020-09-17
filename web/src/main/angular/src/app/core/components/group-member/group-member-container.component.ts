@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
-import { GroupMemberDataService, IGroupMember, IGroupMemberResponse } from './group-member-data.service';
-import { isThatType, isEmpty } from 'app/core/utils/util';
-import { MessageQueueService, MESSAGE_TO, AnalyticsService, TRACKED_EVENT_LIST } from 'app/shared/services';
+import {GroupMemberDataService, IGroupMember, IGroupMemberResponse} from './group-member-data.service';
+import {isEmpty, isThatType} from 'app/core/utils/util';
+import {AnalyticsService, MESSAGE_TO, MessageQueueService, TRACKED_EVENT_LIST} from 'app/shared/services';
 
 @Component({
     selector: 'pp-group-member-container',
@@ -36,7 +36,7 @@ export class GroupMemberContainerComponent implements OnInit, OnDestroy {
                 this.getGroupMemberList();
             } else {
                 this.groupMemberList = [];
-                this.sendMessageCurrentGroupMemeberList([]);
+                this.sendMessageCurrentGroupMemberList([]);
             }
         });
         this.messageQueueService.receiveMessage(this.unsubscribe, MESSAGE_TO.PINPOINT_USER_ADD_USER).subscribe((userId: string) => {
@@ -78,16 +78,16 @@ export class GroupMemberContainerComponent implements OnInit, OnDestroy {
         this.showProcessing();
         this.groupMemberDataService.retrieve(this.currentUserGroupId).subscribe((data: IGroupMember[] | IServerErrorShortFormat) => {
             if (isThatType<IServerErrorShortFormat>(data, 'errorCode', 'errorMessage')) {
-                this.sendMessageCurrentGroupMemeberList(this.getMemberIdList());
+                this.sendMessageCurrentGroupMemberList(this.getMemberIdList());
                 this.errorMessage = data.errorMessage;
             } else {
                 this.groupMemberList = data;
                 this.sortGroupMemberList();
-                this.sendMessageCurrentGroupMemeberList(this.getMemberIdList());
+                this.sendMessageCurrentGroupMemberList(this.getMemberIdList());
             }
             this.hideProcessing();
         }, (error: IServerErrorFormat) => {
-            this.sendMessageCurrentGroupMemeberList(this.getMemberIdList());
+            this.sendMessageCurrentGroupMemberList(this.getMemberIdList());
             this.hideProcessing();
             this.errorMessage = error.exception.message;
         });
@@ -134,7 +134,7 @@ export class GroupMemberContainerComponent implements OnInit, OnDestroy {
             this.sortDescend();
         }
     }
-    private sendMessageCurrentGroupMemeberList(list: string[]): void {
+    private sendMessageCurrentGroupMemberList(list: string[]): void {
         this.messageQueueService.sendMessage({
             to: MESSAGE_TO.GROUP_MEMBER_SET_CURRENT_GROUP_MEMBERS,
             param: list
@@ -152,7 +152,7 @@ export class GroupMemberContainerComponent implements OnInit, OnDestroy {
     }
     onCloseErrorMessage(): void {
         this.errorMessage = '';
-        this.sendMessageCurrentGroupMemeberList(this.getMemberIdList());
+        this.sendMessageCurrentGroupMemberList(this.getMemberIdList());
     }
     onSort(): void {
         if (this.isValidUserGroupId()) {
