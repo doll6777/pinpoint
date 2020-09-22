@@ -15,9 +15,9 @@
  */
 package com.navercorp.pinpoint.web.service;
 
-import java.util.List;
-
 import com.navercorp.pinpoint.web.vo.User;
+
+import java.util.List;
 
 /**
  * @author minwoo.jung
@@ -37,7 +37,9 @@ public interface UserService {
     List<User> selectUser();
 
     User selectUserByUserId(String userId);
-
+    
+    List<User> selectUserByUserGroupId(String userGroupId);
+    
     List<User> selectUserByUserName(String userName);
 
     List<User> selectUserByDepartment(String department);

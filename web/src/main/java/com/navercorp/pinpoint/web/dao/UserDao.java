@@ -15,9 +15,9 @@
  */
 package com.navercorp.pinpoint.web.dao;
 
-import java.util.List;
-
 import com.navercorp.pinpoint.web.vo.User;
+
+import java.util.List;
 
 /**
  * @author minwoo.jung
@@ -39,7 +39,9 @@ public interface UserDao {
     User selectUserByUserId(String userId);
 
     List<User> selectUserByUserName(String userName);
-
+    
+    List<User> selectUserByUserGroupId(String userGroupId);
+    
     void updateUser(User user);
 
     boolean isExistUserId(String userId);

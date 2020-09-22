@@ -15,15 +15,14 @@
  */
 package com.navercorp.pinpoint.web.dao.mysql;
 
-import java.util.List;
-import java.util.Objects;
-
+import com.navercorp.pinpoint.web.dao.UserDao;
+import com.navercorp.pinpoint.web.vo.User;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.navercorp.pinpoint.web.dao.UserDao;
-import com.navercorp.pinpoint.web.vo.User;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author minwoo.jung
@@ -84,7 +83,12 @@ public class MysqlUserDao implements UserDao {
     public List<User> selectUserByUserName(String userName) {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectUserByUserName", userName);
     }
-
+    
+    @Override
+    public List<User> selectUserByUserGroupId(String userGroupId) {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectUserByUserGroupId", userGroupId);
+    }
+    
     @Override
     public void dropAndCreateUserTable() {
         sqlSessionTemplate.selectOne(NAMESPACE + "dropAndCreateUserTable");

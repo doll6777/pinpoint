@@ -15,24 +15,18 @@
  */
 package com.navercorp.pinpoint.web.dao.memory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.navercorp.pinpoint.web.vo.UserPhoneInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.navercorp.pinpoint.web.dao.UserDao;
 import com.navercorp.pinpoint.web.dao.UserGroupDao;
 import com.navercorp.pinpoint.web.vo.User;
 import com.navercorp.pinpoint.web.vo.UserGroup;
 import com.navercorp.pinpoint.web.vo.UserGroupMember;
+import com.navercorp.pinpoint.web.vo.UserPhoneInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author minwoo.jung
@@ -137,9 +131,6 @@ public class MemoryUserGroupDao implements UserGroupDao {
                 User user = userDao.selectUserByUserId(member.getMemberId());
                 member.setName(user.getName());
                 member.setDepartment(user.getDepartment());
-                member.setEmail(user.getEmail());
-                member.setPhoneNumber(user.getPhoneNumber());
-                member.setPhoneCountryCode(user.getPhoneCountryCode());
                 userGroupMemberList.add(member);
             }
         }

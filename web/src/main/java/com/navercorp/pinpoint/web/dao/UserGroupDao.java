@@ -15,11 +15,11 @@
  */
 package com.navercorp.pinpoint.web.dao;
 
-import java.util.List;
-
 import com.navercorp.pinpoint.web.vo.UserGroup;
 import com.navercorp.pinpoint.web.vo.UserGroupMember;
 import com.navercorp.pinpoint.web.vo.UserPhoneInfo;
+
+import java.util.List;
 
 /**
  * @author minwoo.jung
@@ -32,7 +32,7 @@ public interface UserGroupDao {
     List<UserGroup> selectUserGroupByUserId(String userId);
 
     List<UserGroup> selectUserGroupByUserGroupId(String userGroupId);
-
+    
     void updateUserGroup(UserGroup userGroup);
     
     void deleteUserGroup(UserGroup userGroup);
