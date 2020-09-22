@@ -42,8 +42,8 @@
         SELECT *
         FROM puser a
         INNER JOIN user_group_member b ON a.user_id = b.member_id
-        WHERE a.user_group_id =  #{userGroupId}
-        ORDER BY b.department, b.name
+        WHERE b.user_group_id =  #{userGroupId}
+        ORDER BY a.department, a.name
     </select>
 
     <select id="selectUserByDepartment" resultType="User">
