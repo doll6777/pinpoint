@@ -2,12 +2,12 @@ package com.navercorp.pinpoint.web.alarm.vo.sender.payload;
 
 import java.util.List;
 
-public class UserGroupMember {
+public class GroupMember {
     
     private String userGroupId;
     private List<UserMember> userGroupMembers;
     
-    public UserGroupMember(String userGroupId, List<UserMember> userGroupMembers) {
+    public GroupMember(String userGroupId, List<UserMember> userGroupMembers) {
         this.userGroupId = userGroupId;
         this.userGroupMembers = userGroupMembers;
     }
