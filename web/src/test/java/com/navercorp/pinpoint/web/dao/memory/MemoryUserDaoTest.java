@@ -24,24 +24,28 @@ public class MemoryUserDaoTest {
     @InjectMocks
     private  MemoryUserDao memoryUserDao;
     
-    private User createFakeUser(String userID, String dep, String name) {
+    private User createUser(String userID, String dep, String name) {
         return new User(userID, name, dep, 82, "", "");
     }
     
     @Test
     public void insertUser() {
-        User inputUser = createFakeUser("user1", "dep", "name");
+        User inputUser = createUser("user1", "dep", "name");
         memoryUserDao.insertUser(inputUser);
         User selectedUser = memoryUserDao.selectUserByUserId("user1");
         assertEquals(inputUser.getUserId(), selectedUser.getUserId());
+        assertEquals(inputUser.getName(), selectedUser.getName());
+        assertEquals(inputUser.getDepartment(), selectedUser.getDepartment());
+        assertEquals(inputUser.getEmail(), selectedUser.getEmail());
+        assertEquals(inputUser.getPhoneCountryCode(), selectedUser.getPhoneCountryCode());
         assertEquals("0", selectedUser.getNumber());
     }
 
     @Test
     public void insertUserList() {
         List<User> userList = new ArrayList<>();
-        userList.add(createFakeUser("user1", "dep", "name"));
-        userList.add(createFakeUser("user2", "dep", "name"));
+        userList.add(createUser("user1", "dep", "name"));
+        userList.add(createUser("user2", "dep", "name"));
     
         memoryUserDao.insertUserList(userList);
         
@@ -51,8 +55,8 @@ public class MemoryUserDaoTest {
     
     @Test
     public void selectUserByDepartment() {
-        User inputUser1 = createFakeUser("user1", "dep1", "name");
-        User inputUser2 = createFakeUser("user2", "dep2", "name");
+        User inputUser1 = createUser("user1", "dep1", "name");
+        User inputUser2 = createUser("user2", "dep2", "name");
     
         memoryUserDao.insertUser(inputUser1);
         memoryUserDao.insertUser(inputUser2);
@@ -63,8 +67,8 @@ public class MemoryUserDaoTest {
     
     @Test
     public void selectUserByUserName() {
-        User inputUser1 = createFakeUser("user1", "dep1", "name1");
-        User inputUser2 = createFakeUser("user2", "dep1", "name2");
+        User inputUser1 = createUser("user1", "dep1", "name1");
+        User inputUser2 = createUser("user2", "dep1", "name2");
     
         memoryUserDao.insertUser(inputUser1);
         memoryUserDao.insertUser(inputUser2);
@@ -75,8 +79,8 @@ public class MemoryUserDaoTest {
     
     @Test
     public void selectUserByUserGroupId() {
-        User inputUser1 = createFakeUser("user1", "dep1", "name1");
-        User inputUser2 = createFakeUser("user2", "dep1", "name2");
+        User inputUser1 = createUser("user1", "dep1", "name1");
+        User inputUser2 = createUser("user2", "dep1", "name2");
         memoryUserDao.insertUser(inputUser1);
         memoryUserDao.insertUser(inputUser2);
     
