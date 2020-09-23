@@ -98,6 +98,7 @@ public class MemoryUserDaoTest {
     
         assertEquals(userGroupMember1.getMemberId(), selectedUserList.get(0).getUserId());
         assertEquals(userGroupMember1.getName(), selectedUserList.get(0).getName());
+        assertEquals(1, selectedUserList.size());
     }
     
     @Test
