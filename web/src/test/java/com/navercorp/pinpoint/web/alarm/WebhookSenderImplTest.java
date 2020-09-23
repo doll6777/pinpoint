@@ -4,7 +4,7 @@ import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
 import com.navercorp.pinpoint.web.alarm.checker.SlowCountToCalleeChecker;
 import com.navercorp.pinpoint.web.alarm.vo.AlarmCheckerDetectedValue;
 import com.navercorp.pinpoint.web.alarm.vo.Rule;
-import com.navercorp.pinpoint.web.alarm.vo.sender.WebhookPayload;
+import com.navercorp.pinpoint.web.alarm.vo.sender.payload.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import com.navercorp.pinpoint.web.service.UserService;
 import com.navercorp.pinpoint.web.vo.User;

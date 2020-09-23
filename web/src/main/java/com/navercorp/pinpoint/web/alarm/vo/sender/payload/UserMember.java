@@ -1,4 +1,4 @@
-package com.navercorp.pinpoint.web.alarm.vo.sender;
+package com.navercorp.pinpoint.web.alarm.vo.sender.payload;
 
 import com.navercorp.pinpoint.web.vo.User;
 
