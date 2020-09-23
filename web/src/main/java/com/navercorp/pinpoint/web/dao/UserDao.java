@@ -15,9 +15,9 @@
  */
 package com.navercorp.pinpoint.web.dao;
 
-import com.navercorp.pinpoint.web.vo.User;
-
 import java.util.List;
+
+import com.navercorp.pinpoint.web.vo.User;
 
 /**
  * @author minwoo.jung
