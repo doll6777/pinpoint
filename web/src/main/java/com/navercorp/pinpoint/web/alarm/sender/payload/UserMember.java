@@ -14,15 +14,13 @@ public class UserMember {
     public UserMember() {
     }
     
-    public static UserMember from(User user) {
-        UserMember userMember = new UserMember();
-        userMember.memberId = user.getUserId();
-        userMember.name = user.getName();
-        userMember.email = user.getEmail();
-        userMember.department = user.getDepartment();
-        userMember.phoneNumber = user.getPhoneNumber();
-        userMember.phoneCountryCode = user.getPhoneCountryCode();
-        return userMember;
+    public UserMember(String memberId, String name, String email, String department, String phoneNumber, int phoneCountryCode) {
+        this.memberId = memberId;
+        this.name = name;
+        this.email = email;
+        this.department = department;
+        this.phoneNumber = phoneNumber;
+        this.phoneCountryCode = phoneCountryCode;
     }
     
     public String getMemberId() {

@@ -153,9 +153,9 @@ public class WebhookSenderImplTest {
     
     private UserService getUserServiceStub() {
         UserService mock = mock(UserService.class);
-        User member1 = new User(USER_GROUP_ID, "member1", "dep", 82, "1012345678", "pinpoint@naver.com");
-        User member2 = new User(USER_GROUP_ID, "member2", "dep", 82, "1012345678", "pinpoint@naver.com");
-        User member3 = new User(USER_GROUP_ID, "member3", "dep", 82, "1012345678", "pinpoint@naver.com");
+        User member1 = new User(USER_GROUP_ID, "member1", "dep1", 82, "1012345678", "pinpoint1@naver.com");
+        User member2 = new User(USER_GROUP_ID, "member2", "dep2", 82, "1045678901", "pinpoint2@naver.com");
+        User member3 = new User(USER_GROUP_ID, "member3", "dep3", 82, "1023456789", "pinpoint3@naver.com");
         List<User> testUserGroupMember = Arrays.asList(member1, member2, member3);
 
         when(mock.selectUserByUserGroupId(USER_GROUP_ID)).thenReturn(testUserGroupMember);

@@ -69,7 +69,7 @@ public class WebhookSenderImpl implements WebhookSender {
             
             List<UserMember> userMembers = userService.selectUserByUserGroupId(userGroupId)
                     .stream()
-                    .map(UserMember::from)
+                    .map(user -> new UserMember(user.getUserId(), user.getName(), user.getEmail(), user.getDepartment(), user.getPhoneNumber(), user.getPhoneCountryCode()))
                     .collect(Collectors.toList());
 
             GroupMember groupMember = new GroupMember(userGroupId, userMembers);
