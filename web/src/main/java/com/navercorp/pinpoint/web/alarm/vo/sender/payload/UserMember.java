@@ -1,7 +1,5 @@
 package com.navercorp.pinpoint.web.alarm.vo.sender.payload;
 
-import com.navercorp.pinpoint.web.vo.User;
-
 public class UserMember {
 
     private String memberId;

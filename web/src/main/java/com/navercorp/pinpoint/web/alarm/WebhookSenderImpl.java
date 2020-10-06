@@ -16,7 +16,7 @@
 package com.navercorp.pinpoint.web.alarm;
 
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
-import com.navercorp.pinpoint.web.alarm.vo.sender.payload.GroupMember;
+import com.navercorp.pinpoint.web.alarm.vo.sender.payload.UserGroup;
 import com.navercorp.pinpoint.web.alarm.vo.sender.payload.UserMember;
 import com.navercorp.pinpoint.web.alarm.vo.sender.payload.WebhookPayload;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
@@ -72,9 +72,9 @@ public class WebhookSenderImpl implements WebhookSender {
                     .map(user -> new UserMember(user.getUserId(), user.getName(), user.getEmail(), user.getDepartment(), user.getPhoneNumber(), user.getPhoneCountryCode()))
                     .collect(Collectors.toList());
 
-            GroupMember groupMember = new GroupMember(userGroupId, userMembers);
+            UserGroup userGroup = new UserGroup(userGroupId, userMembers);
             
-            WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount, groupMember);
+            WebhookPayload webhookPayload = new WebhookPayload(checker, batchConfiguration, sequenceCount, userGroup);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
             
