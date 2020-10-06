@@ -30,7 +30,7 @@ public class WebhookPayload {
         this.checkerDetectedValue = checker.getCheckerDetectedValue();
     }
     
-    public UserGroup getUserGroupMemberPayload() {
+    public UserGroup getUserGroup() {
         return userGroup;
     }
     
