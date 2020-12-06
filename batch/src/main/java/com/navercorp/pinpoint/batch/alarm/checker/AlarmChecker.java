@@ -16,33 +16,32 @@
 
 package com.navercorp.pinpoint.batch.alarm.checker;
 
-
 import com.navercorp.pinpoint.batch.alarm.collector.DataCollector;
+import com.navercorp.pinpoint.batch.alarm.vo.sender.payload.AlarmCheckerDetectedValue;
+import com.navercorp.pinpoint.batch.alarm.vo.sender.payload.CheckerDetectedValue;
 import com.navercorp.pinpoint.web.alarm.vo.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author koo.taejin
  * @author minwoo.jung
+ * @author Jongjin.Bae
  */
 public abstract class AlarmChecker<T> {
-
+    
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    protected final Rule rule;
-    protected final String unit;
     protected final DataCollector dataCollector;
-
+    protected final Rule rule;
     protected boolean detected = false;
-
+    protected final String unit;
+    
     protected AlarmChecker(Rule rule, String unit, DataCollector dataCollector) {
-        this.rule = Objects.requireNonNull(rule, "rule");
-        this.unit = Objects.requireNonNull(unit, "unit");
+        this.rule = rule;
+        this.unit = unit;
         this.dataCollector = dataCollector;
     }
     
@@ -62,6 +61,10 @@ public abstract class AlarmChecker<T> {
         return rule.isEmailSend();
     }
     
+    public boolean isWebhookSend() {
+        return rule.isWebhookSend();
+    }
+    
     public String getUserGroupId() {
         return rule.getUserGroupId();
     }
@@ -69,9 +72,9 @@ public abstract class AlarmChecker<T> {
     public String getUnit() {
         return unit;
     }
-
+    
     protected abstract boolean decideResult(T value);
-
+    
     public void check() {
         dataCollector.collect();
         detected = decideResult(getDetectedValue());
@@ -89,5 +92,11 @@ public abstract class AlarmChecker<T> {
     }
     
     protected abstract T getDetectedValue();
-
+    
+    public CheckerDetectedValue getCheckerDetectedValue() {
+        return new AlarmCheckerDetectedValue<>(getDetectedValue());
+    }
+    
+    public abstract String getCheckerType();
+    
 }

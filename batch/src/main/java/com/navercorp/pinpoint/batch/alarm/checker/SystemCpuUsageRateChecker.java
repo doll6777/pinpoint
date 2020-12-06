@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.navercorp.pinpoint.batch.alarm.checker;
 
 import com.navercorp.pinpoint.batch.alarm.collector.AgentStatDataCollector;
@@ -22,21 +23,17 @@ import java.util.Map;
 
 /**
  * @author minwoo.jung
+ * @author Jongjin.Bae
  */
-public class SystemCpuUsageRateChecker extends AgentChecker<Long> {
-
+public class SystemCpuUsageRateChecker extends LongValueAgentChecker {
+    
     public SystemCpuUsageRateChecker(AgentStatDataCollector dataCollector, Rule rule) {
         super(rule, "%", dataCollector);
     }
-
+    
     @Override
     protected Map<String, Long> getAgentValues() {
         return ((AgentStatDataCollector)dataCollector).getSystemCpuUsageRate();
     }
-
-    @Override
-    protected boolean decideResult(Long value) {
-        return value >= rule.getThreshold();
-    }
-
+    
 }

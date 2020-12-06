@@ -23,21 +23,17 @@ import java.util.Map;
 
 /**
  * @author minwoo.jung
+ * @author Jongjin.Bae
  */
-public class JvmCpuUsageRateChecker extends AgentChecker<Long> {
+public class JvmCpuUsageRateChecker extends LongValueAgentChecker {
     
     public JvmCpuUsageRateChecker(AgentStatDataCollector dataCollector, Rule rule) {
         super(rule, "%", dataCollector);
     }
-
+    
     @Override
     protected Map<String, Long> getAgentValues() {
         return ((AgentStatDataCollector)dataCollector).getJvmCpuUsageRate();
     }
-
-    @Override
-    protected boolean decideResult(Long value) {
-        return value >= rule.getThreshold();
-    }
-
+    
 }

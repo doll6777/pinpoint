@@ -25,13 +25,14 @@ import java.util.Map;
 
 /**
  * @author Taejin Koo
+ * @author Jongjin.Bae
  */
-public class DeadlockChecker extends AgentChecker<Boolean> {
-
+public class DeadlockChecker extends BooleanValueAgentChecker {
+    
     public DeadlockChecker(AgentEventDataCollector agentEventDataCollector, Rule rule) {
         super(rule, "BOOLEAN", agentEventDataCollector);
     }
-
+    
     @Override
     protected boolean decideResult(Boolean value) {
         // 0 is set disable
@@ -40,29 +41,29 @@ public class DeadlockChecker extends AgentChecker<Boolean> {
         }
         return false;
     }
-
+    
     @Override
     protected Map<String, Boolean> getAgentValues() {
         return ((AgentEventDataCollector) dataCollector).getAgentDeadlockEventDetected();
     }
-
+    
     public List<String> getSmsMessage() {
         List<String> messages = new LinkedList<>();
-
+        
         for (Map.Entry<String, Boolean> detected : detectedAgents.entrySet()) {
             messages.add(String.format("[PINPOINT Alarm - %s] Deadlock thread detected", detected.getKey()));
         }
-
+        
         return messages;
     }
-
+    
     @Override
     public String getEmailMessage() {
         StringBuilder message = new StringBuilder();
         for (Map.Entry<String, Boolean> detected : detectedAgents.entrySet()) {
             message.append(String.format(" Value of agent(%s) has deadlocked thread during the past 5 mins.", detected.getKey()));
+            message.append("<br>");
         }
         return message.toString();
     }
-
 }

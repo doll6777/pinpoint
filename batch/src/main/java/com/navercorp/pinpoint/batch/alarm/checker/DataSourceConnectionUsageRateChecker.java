@@ -26,13 +26,14 @@ import java.util.Map;
 
 /**
  * @author Taejin Koo
+ * @author Jongjin.Bae
  */
-public class DataSourceConnectionUsageRateChecker extends AgentChecker<List<DataSourceAlarmVO>> {
-
+public class DataSourceConnectionUsageRateChecker extends DataSourceAlarmListValueAgentChecker {
+    
     public DataSourceConnectionUsageRateChecker(DataSourceDataCollector dataSourceDataCollector, Rule rule) {
         super(rule, "%", dataSourceDataCollector);
     }
-
+    
     @Override
     protected boolean decideResult(List<DataSourceAlarmVO> dataSourceAlarmVOList) {
         for (DataSourceAlarmVO dataSourceAlarm : dataSourceAlarmVOList) {
@@ -40,26 +41,26 @@ public class DataSourceConnectionUsageRateChecker extends AgentChecker<List<Data
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     private boolean decideResult0(DataSourceAlarmVO dataSourceAlarmVO) {
         if (dataSourceAlarmVO.getConnectionUsedRate() > rule.getThreshold()) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     @Override
     protected Map<String, List<DataSourceAlarmVO>> getAgentValues() {
         return ((DataSourceDataCollector) dataCollector).getDataSourceConnectionUsageRate();
     }
-
+    
     public List<String> getSmsMessage() {
         List<String> messages = new LinkedList<>();
-
+        
         for (Map.Entry<String, List<DataSourceAlarmVO>> detected : detectedAgents.entrySet()) {
             for (DataSourceAlarmVO dataSourceAlarmVO : detected.getValue()) {
                 if (decideResult0(dataSourceAlarmVO)) {
@@ -67,10 +68,10 @@ public class DataSourceConnectionUsageRateChecker extends AgentChecker<List<Data
                 }
             }
         }
-
+        
         return messages;
     }
-
+    
     @Override
     public String getEmailMessage() {
         StringBuilder message = new StringBuilder();
@@ -78,11 +79,12 @@ public class DataSourceConnectionUsageRateChecker extends AgentChecker<List<Data
             for (DataSourceAlarmVO dataSourceAlarmVO : detected.getValue()) {
                 if (decideResult0(dataSourceAlarmVO)) {
                     message.append(String.format(" Value of agent(%s) has %s%s(DataSource %s connection pool usage) during the past 5 mins.(Threshold : %s%s)", detected.getKey(), dataSourceAlarmVO.getConnectionUsedRate(), unit, dataSourceAlarmVO.getDatabaseName(), rule.getThreshold(), unit));
+                    message.append("<br>");
                 }
             }
-
+            
         }
         return message.toString();
     }
-
+    
 }

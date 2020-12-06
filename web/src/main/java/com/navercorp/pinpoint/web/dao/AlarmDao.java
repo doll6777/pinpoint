@@ -23,10 +23,13 @@ import com.navercorp.pinpoint.web.vo.UserGroup;
 
 /**
  * @author minwoo.jung
+ * @author Jongjin.Bae
  */
 public interface AlarmDao {
 
     String insertRule(Rule rule);
+    
+    String insertRuleExceptWebhookSend(Rule rule);
 
     void deleteRule(Rule rule);
 
@@ -35,8 +38,10 @@ public interface AlarmDao {
     List<Rule> selectRuleByUserGroupId(String userGroupId);
     
     List<Rule> selectRuleByApplicationId(String applicationId);
-
+    
     void updateRule(Rule rule);
+    
+    void updateRuleExceptWebhookSend(Rule rule);
 
     List<CheckerResult> selectBeforeCheckerResultList(String applicationId);
 

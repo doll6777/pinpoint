@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 NAVER Corp.
+ * Copyright 2020 NAVER Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,26 @@
 
 package com.navercorp.pinpoint.batch.alarm.checker;
 
-import com.navercorp.pinpoint.batch.alarm.collector.AgentStatDataCollector;
+import com.navercorp.pinpoint.batch.alarm.collector.DataCollector;
 import com.navercorp.pinpoint.web.alarm.vo.Rule;
 
-import java.util.Map;
-
 /**
- * @author minwoo.jung
  * @author Jongjin.Bae
  */
-public class GcCountChecker extends LongValueAgentChecker {
+public abstract class LongValueAgentChecker extends AgentChecker<Long> {
     
-    public GcCountChecker(AgentStatDataCollector dataCollector, Rule rule) {
-        super(rule, "", dataCollector);
+    protected LongValueAgentChecker(Rule rule, String unit, DataCollector dataCollector) {
+        super(rule, unit, dataCollector);
     }
     
     @Override
-    protected Map<String, Long> getAgentValues() {
-        return ((AgentStatDataCollector)dataCollector).getGCCount();
+    protected boolean decideResult(Long value) {
+        return value >= rule.getThreshold();
+    }
+    
+    @Override
+    public String getCheckerType() {
+        return LongValueAgentChecker.class.getSimpleName();
     }
     
 }
