@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import com.navercorp.pinpoint.web.dao.AlarmDao;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class AlarmReaderTest {
         ExecutionContext executionContext = new ExecutionContext();
         stepExecution.setExecutionContext(executionContext);
         
-        AlarmServiceImpl alarmService = new AlarmServiceImpl(mock(AlarmDao.class)) {
+        AlarmServiceImpl alarmService = new AlarmServiceImpl(mock(AlarmDao.class), mock(BatchConfiguration.class)) {
             @Override
             public java.util.List<Rule> selectRuleByApplicationId(String applicationId) {
                 return new LinkedList<>();
@@ -114,14 +115,14 @@ public class AlarmReaderTest {
             
         };
 
-        alarmService = new AlarmServiceImpl(mock(AlarmDao.class)) {
+        alarmService = new AlarmServiceImpl(mock(AlarmDao.class), mock(BatchConfiguration.class)) {
             private final Map<String, Rule> ruleMap ;
 
             {
                 ruleMap = new HashMap<String, Rule>();
 
                 for(int i = 0; i <=6; i++) {
-                    ruleMap.put(APP_NAME + i, new Rule(APP_NAME + i, SERVICE_TYPE, CheckerCategory.SLOW_COUNT.getName(), 76, "testGroup", false, false, ""));
+                    ruleMap.put(APP_NAME + i, new Rule(APP_NAME + i, SERVICE_TYPE, CheckerCategory.SLOW_COUNT.getName(), 76, "testGroup", false, false, false, ""));
                 }
             }
 
