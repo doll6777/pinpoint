@@ -10,6 +10,12 @@
         <constructor-arg ref="javaMailSenderImpl"/>
     </bean>
 
+    <bean id="webhookSender" class="com.navercorp.pinpoint.batch.alarm.WebhookSenderImpl">
+        <constructor-arg ref="batchConfiguration"/>
+        <constructor-arg ref="restTemplate" />
+        <constructor-arg ref="userServiceImpl"/>
+    </bean>
+
     <bean id="javaMailSenderImpl" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${alarm.mail.server.url:}" />
         <property name="port" value="${alarm.mail.server.port:587}" />
@@ -33,8 +39,14 @@
     <bean id="userGroupDao" class="com.navercorp.pinpoint.web.dao.mysql.MysqlUserGroupDao"/>
     <bean id="userDao" class="com.navercorp.pinpoint.web.dao.mysql.MysqlUserDao"/>
 
+    <bean id="alarmDao" class="com.navercorp.pinpoint.web.dao.mysql.MysqlAlarmDao"/>
     <bean id="userGroupService" class="com.navercorp.pinpoint.web.service.UserGroupServiceImpl"/>
-    <bean id="alarmService" class="com.navercorp.pinpoint.web.service.AlarmServiceImpl"/>
+
+    <bean id="webBatchConfiguration" class="com.navercorp.pinpoint.web.batch.BatchConfiguration"/>
+    <bean id="alarmService" class="com.navercorp.pinpoint.web.service.AlarmServiceImpl">
+        <constructor-arg index="0" ref="alarmDao" />
+        <constructor-arg index="1" ref="webBatchConfiguration" />
+    </bean>
     <bean id="userService" class="com.navercorp.pinpoint.web.service.UserServiceImpl"/>
 
 </beans>
